@@ -4,13 +4,10 @@ import Home from './components/pages/Home'
 
 const App = () => {
   return (
-    <>
+    <main>
     <Navbar/>
     <Home/>
-    <Home/>
-    <Home/>
-    <Home/>
-    </>
+    </main>
   )
 }
 
