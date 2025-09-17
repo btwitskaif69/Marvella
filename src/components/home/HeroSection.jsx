@@ -11,7 +11,7 @@ const HeroSection = ({
   return (
     <section className="relative isolate w-full overflow-hidden bg-black">
       {/* Background image */}
-      <div className="relative h-[72vh] min-h-[420px] w-full md:h-[82vh]">
+      <div className="relative h-[72vh] min-h-[420px] w-full md:h-[100vh]">
         <img
           src={image}
           alt="Campaign"

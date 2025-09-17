@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Heart, Video, ChevronLeft, ChevronRight } from "lucide-react";
 import image1 from "@/assets/images/product1.avif";
 import image2 from "@/assets/images/product2.avif";
@@ -29,89 +29,75 @@ const products = [
   { id: 12, image: image12, name: "LV Rouge - Satin Lipstick" },
 ];
 
+const INITIAL_VISIBLE = 4;
+
 const ProductCard = () => {
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? products : products.slice(0, INITIAL_VISIBLE);
+  const remaining = Math.max(products.length - INITIAL_VISIBLE, 0);
+
   return (
     <section className="w-full bg-white">
       {/* Product grid */}
       <div className="grid grid-cols-2 gap-0 md:grid-cols-3 lg:grid-cols-4">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="relative flex flex-col justify-between text-center"
-          >
-            {/* Background SVG behind everything */}
-            <img
-              src={bg}
-              alt="bg"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
+        {visible.map((product) => (
+          <div key={product.id} className="relative flex flex-col justify-between text-center">
+            {/* Background behind everything */}
+            <img src={bg} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
 
             {/* Card content */}
-            <div className="relative z-10 flex flex-col h-full">
-              {/* Top icons */}
+            <div className="relative z-10 flex h-full flex-col">
+              {/* Top row */}
               <div className="absolute left-2 top-2 flex items-center gap-2 text-xs font-medium text-black">
                 <span className="flex items-center gap-1 px-2 py-1 text-[11px]">
                   <Video className="h-4 w-4" /> Virtual Try On
                 </span>
               </div>
-              <button
-                aria-label="Add to wishlist"
-                className="absolute right-2 top-2 p-1 "
-              >
+              <button aria-label="Add to wishlist" className="absolute right-2 top-2 p-1">
                 <Heart className="h-4 w-4" />
               </button>
 
-              {/* Product image with arrows */}
+              {/* Image area */}
               <div className="relative flex flex-1 items-center justify-center px-4 pt-12">
                 <button className="absolute left-2 top-1/2 p-1">
                   <ChevronLeft className="h-4 w-4" />
                 </button>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="max-h-[500px] w-full object-contain"
-                />
+                <img src={product.image} alt={product.name} className="max-h-[500px] w-full object-contain" />
                 <button className="absolute right-2 top-1/2 p-1">
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
 
-{/* Details */}
-<div className="mt-4 px-4 pb-6 text-sm">
-  {/* Top: Label */}
-  <p className="text-[12px] leading-none text-neutral-500 text-start">
-    New · Refillable
-  </p>
-
-  {/* Bottom: Product name (left) + Shades (right) */}
-  <div className="mt-1 flex items-center justify-between">
-    <h3 className="text-[14px] font-medium text-neutral-800">
-      {product.name}
-    </h3>
-
-    <div className="flex items-center gap-1">
-      <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#AD0F23]" />
-      <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#BF4A57]" />
-      <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#8E0F1E]" />
-      <span className="ml-2 text-[12px] leading-none text-neutral-600">
-        + 24
-      </span>
-    </div>
-  </div>
-</div>
-
-
+              {/* Details */}
+              <div className="mt-4 px-4 pb-6 text-sm">
+                <p className="text-[12px] leading-none text-neutral-500 text-start">New · Refillable</p>
+                <div className="mt-1 flex items-center justify-between">
+                  <h3 className="text-[14px] font-medium text-neutral-800">{product.name}</h3>
+                  <div className="flex items-center gap-1">
+                    <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#AD0F23]" />
+                    <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#BF4A57]" />
+                    <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#8E0F1E]" />
+                    <span className="ml-2 text-[12px] leading-none text-neutral-600">+ 24</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* View more button */}
-      <div className="mt-10 flex justify-center">
-        <button className="rounded-full border border-neutral-400 px-8 py-2 text-sm font-medium hover:bg-neutral-100">
-          View More
-        </button>
-      </div>
+      {/* View more / less */}
+      {products.length > INITIAL_VISIBLE && (
+        <div className="mt-10 flex justify-center">
+          <button
+            onClick={() => setExpanded((s) => !s)}
+            className="rounded-full border border-neutral-400 px-8 py-2 text-sm font-medium hover:bg-neutral-100"
+            aria-expanded={expanded}
+          >
+            {expanded ? "View Less" : remaining > 0 ? `View More (${remaining})` : "View More"}
+          </button>
+        </div>
+      )}
     </section>
   );
 };

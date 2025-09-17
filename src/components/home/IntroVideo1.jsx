@@ -3,7 +3,6 @@ import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import intro from "@/assets/video/intro1.mp4";
 
 const IntroVideo1 = () => {
-  /** @type {React.MutableRefObject<HTMLVideoElement|null>} */
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
@@ -14,22 +13,18 @@ const IntroVideo1 = () => {
 
     const onPlay = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
-
     v.addEventListener("play", onPlay);
     v.addEventListener("pause", onPause);
 
-    // try to play once mounted (some browsers need a catch)
-    const tryPlay = async () => {
+    (async () => {
       try {
-        v.muted = true; // ensure muted for autoplay policies
+        v.muted = true;
         await v.play();
         setIsPlaying(!v.paused);
-      } catch (_) {
-        // Autoplay blocked; show paused state
+      } catch {
         setIsPlaying(false);
       }
-    };
-    tryPlay();
+    })();
 
     return () => {
       v.removeEventListener("play", onPlay);
@@ -40,8 +35,7 @@ const IntroVideo1 = () => {
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
-    if (v.paused) v.play();
-    else v.pause();
+    v.paused ? v.play() : v.pause();
   };
 
   const toggleMute = () => {
@@ -52,22 +46,24 @@ const IntroVideo1 = () => {
   };
 
   return (
-    <section className="relative isolate w-full overflow-hidden bg-black">
-      {/* Video */}
+    // Give the section a reliable height and a black fallback color
+    <section className="relative isolate w-full overflow-hidden h-[70svh] md:h-[85svh]">
+      {/* Video absolutely covers the section; 'block' kills inline baseline gap */}
       <video
         ref={videoRef}
-        className="h-[70vh] w-full object-cover md:h-[85vh]"
+        className="absolute inset-0 block h-full w-full object-cover"
         src={intro}
+        autoPlay
         loop
         muted={isMuted}
         playsInline
         preload="metadata"
       />
 
-      {/* Left gradient scrim */}
+      {/* Overlay gradient */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(80%_80%_at_0%_100%,rgba(0,0,0,0.55)_0%,transparent_60%)]" />
 
-      {/* Copy block (bottom-left) */}
+      {/* Copy */}
       <div className="pointer-events-none absolute bottom-8 left-6 z-10 max-w-xl text-white sm:left-10 sm:bottom-10 md:bottom-14">
         <h2 className="pointer-events-auto mb-3 text-2xl font-semibold tracking-wide sm:text-3xl md:text-4xl">
           LV Rouge Matte
@@ -78,7 +74,7 @@ const IntroVideo1 = () => {
         </p>
       </div>
 
-      {/* Controls (bottom-right) */}
+      {/* Controls */}
       <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3 sm:bottom-6 sm:right-6">
         <button
           onClick={togglePlay}
