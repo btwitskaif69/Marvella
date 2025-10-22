@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Neon pooled (-pooler)
+  directUrl = env("DIRECT_URL")   // optional for Prisma CLI
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String?
+  role         Role     @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Collection {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  products    Product[]            // one collection → many products
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  name         String
+  slug         String      @unique
+  description  String?
+  price        Decimal     @db.Decimal(10,2)
+  imageUrls    String[]    @default([]) // Postgres text[]
+  inStock      Boolean     @default(true)
+
+  // relation to Collection (optional; product can be “uncategorized”)
+  collection   Collection? @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  collectionId String?
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([name])
+  @@index([collectionId])
+}
