@@ -1,6 +1,29 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap");
+/* Add Playfair Display for primary/serif */
+
+
+/* prevent horizontal scrollbar caused by any element pushing past viewport */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* hide horizontal overflow site-wide (keeps footer/nav visible) */
+body {
+  overflow-x: hidden;
+}
+
+/* if you want to hide *all* scrollbars including vertical on the AR page:
+body.ar-no-scroll { overflow: hidden; }
+
+/* debug outline for overflow detection (remove when done) */
+.debug-outline * {
+  outline: 1px solid rgba(255,0,0,0.04);
+}
+
+
 
 :root {
   --background: #ffffff;
@@ -99,8 +122,8 @@
      - use `font-sans` for Helvetica Neue stack
      - use `font-serif` for Playfair Display stack
   */
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --font-sans:  var(--font-sans);
+  --font-mono:  var(--font-mono);
   --font-serif: var(--font-serif);
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -109,12 +132,12 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   --shadow-2xs: var(--shadow-2xs);
-  --shadow-xs: var(--shadow-xs);
-  --shadow-sm: var(--shadow-sm);
-  --shadow: var(--shadow);
-  --shadow-md: var(--shadow-md);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-xl: var(--shadow-xl);
+  --shadow-xs:  var(--shadow-xs);
+  --shadow-sm:  var(--shadow-sm);
+  --shadow:     var(--shadow);
+  --shadow-md:  var(--shadow-md);
+  --shadow-lg:  var(--shadow-lg);
+  --shadow-xl:  var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
 }
 
