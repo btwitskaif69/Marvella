@@ -1,10 +1,13 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Router } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './components/pages/Home'
 import Footer from './components/Footer'
 import ProductDetails from './components/pages/ProductDetails'
 import LipstickAR from "./AR/LipstickAR";
+import Signup from "@/components/forms/Signup"
+import Login from "@/components/forms/Login"
+
 
 const App = () => {
   return (
@@ -22,6 +25,9 @@ const App = () => {
             </div>
           }
         />
+        <Route path='/signup' element={<Signup/>}/>
+        <Route path='/login' element={<Login/>}/>
+
       </Routes>
       <Footer/>
     </main>

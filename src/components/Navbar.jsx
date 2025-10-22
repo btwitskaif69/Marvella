@@ -4,6 +4,7 @@ import { Menu, Search, Heart, User, Phone } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import logo from "@/assets/logos/logo.svg";
+import { Link } from "react-router-dom";
 
 const NAV_H_MOBILE = "h-16";     // 64px
 const NAV_H_DESKTOP = "md:h-20"; // 80px
@@ -134,12 +135,14 @@ const Navbar = () => {
           >
             <Heart className="h-5 w-5" />
           </button>
+          <Link to="/login">
           <button
             className={`inline-flex items-center justify-center hover:opacity-80 transition-colors duration-300 ${textClass}`}
             aria-label="Account"
           >
             <User className="h-5 w-5" />
           </button>
+          </Link>
         </div>
       </div>
     </header>

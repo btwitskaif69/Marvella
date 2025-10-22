@@ -1,4 +1,4 @@
-const { prisma } = require('../db/prisma');
+const { prisma } = require('../db/prismaClient');
 
 async function listProducts(_req, res, next) {
   try {
