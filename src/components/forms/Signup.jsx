@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,12 +16,18 @@ import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
 
-// API URL to user creation endpoint
-const API_URL = `${
-  import.meta.env.VITE_APP_BACKEND_URL || "http://localhost:5000"
-}/api/users`;
+// Base API URL (e.g., http://localhost:5000/api)
+const API_BASE =
+  import.meta.env.VITE_APP_BACKEND_URL || "http://localhost:5000/api";
 
-export function SignupForm({ className, ...props }) {
+// Axios instance
+const api = axios.create({
+  baseURL: API_BASE,
+  withCredentials: true, // using credentialed CORS; backend is configured for this
+  headers: { "Content-Type": "application/json" },
+});
+
+export default function SignupForm({ className, ...props }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -41,24 +48,22 @@ export function SignupForm({ className, ...props }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Signup failed. Please try again.");
-      }
+      // POST -> /api/users/auth/register (router mounted at /api/users)
+      const { data } = await api.post("/users/auth/register", formData);
 
       toast.success("Account created successfully!");
-      login(data.user, data.token);
-      navigate(`/dashboard/${data.user.id}`);
-    } catch (error) {
-      console.error("Signup error:", error);
-      toast.error(error.message);
+      // Save auth in context
+      login?.(data.user, data.token);
+      // Navigate to user dashboard (support id or _id)
+      const userId = data?.user?.id || data?.user?._id;
+      navigate(`/login`);
+    } catch (err) {
+      console.error("Signup error:", err);
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        "Signup failed. Please try again.";
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +119,7 @@ export function SignupForm({ className, ...props }) {
                     value={formData.password}
                     onChange={handleChange}
                     disabled={isLoading}
-                    className="bg-background pr-12"  // extra room for the button
+                    className="bg-background pr-12"
                     required
                   />
                   {formData.password.length > 0 && (
@@ -129,7 +134,11 @@ export function SignupForm({ className, ...props }) {
                       aria-pressed={showPassword}
                       title={showPassword ? "Hide password" : "Show password"}
                     >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </button>
                   )}
                 </div>
@@ -144,6 +153,7 @@ export function SignupForm({ className, ...props }) {
                   className="w-full bg-background"
                   disabled={isLoading}
                   type="button"
+                  onClick={() => toast.info("Google signup coming soon")}
                 >
                   Sign up with Google
                 </Button>
@@ -151,7 +161,7 @@ export function SignupForm({ className, ...props }) {
             </div>
 
             <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
+              Already have an account{" "}
               <Link to="/login" className="underline underline-offset-4">
                 Log in
               </Link>

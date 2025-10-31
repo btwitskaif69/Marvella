@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AuthContext = createContext(null);
-const API_URL = import.meta.env.VITE_APP_BACKEND_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_APP_BACKEND_URL || "http://localhost:5000/api";
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();

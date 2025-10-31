@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
-/* Add Playfair Display for primary/serif */
 
+@custom-variant dark (&:is(.dark *));
+/* Add Playfair Display for primary/serif */
 
 /* prevent horizontal scrollbar caused by any element pushing past viewport */
 html, body, #root {
@@ -22,8 +23,6 @@ body.ar-no-scroll { overflow: hidden; }
 .debug-outline * {
   outline: 1px solid rgba(255,0,0,0.04);
 }
-
-
 
 :root {
   --background: #ffffff;
@@ -150,5 +149,25 @@ body.ar-no-scroll { overflow: hidden; }
   }
   h1, h2, h3, h4 {
     @apply font-serif; /* headings: Playfair Display */
+  }
+}
+
+.dark {
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
