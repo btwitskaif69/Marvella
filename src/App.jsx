@@ -7,6 +7,7 @@ import ProductDetails from './components/pages/ProductDetails'
 import LipstickAR from "./AR/LipstickAR";
 import Signup from "@/components/forms/Signup"
 import Login from "@/components/forms/Login"
+import Dashboard from "@/components/admin-dashboard/Dashboard"
 
 
 const App = () => {
@@ -27,7 +28,7 @@ const App = () => {
         />
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
-
+        <Route path='/dashboard' element={<Dashboard/>}/>
       </Routes>
       <Footer/>
     </main>
